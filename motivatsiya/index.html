@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Motivatsiya kompasi</title>
+<style>
+:root{
+  --bg:#f5f4ef;--card:#fff;--ink:#1d2330;--mute:#5b6577;--line:#dad7cd;
+  --acc:#2f5de0;--acc-ink:#fff;--soft:#eef1fb;--warn-bg:#fff4d6;--warn-line:#e0b23a;
+  --ok:#17794f;--bad:#b3410c;
+  --cA:#d9480f;--cK:#2f5de0;--cB:#2b8a3e;
+  --zin:#cfe0ff;--zmid:#fde7bd;--zout:#ffd6c2;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#12141a;--card:#1b1e27;--ink:#e8eaf1;--mute:#9aa3b5;--line:#2d3242;
+  --acc:#7a9cff;--acc-ink:#0b1022;--soft:#232944;--warn-bg:#2b2410;--warn-line:#8a6d1e;
+  --ok:#5dd6a0;--bad:#ff9a6b;--cA:#ff8c5a;--cK:#7a9cff;--cB:#5dd6a0;
+  --zin:#1f2f55;--zmid:#4a3a12;--zout:#5a2c1a}
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header.wrap{padding-top:20px}
+h1{font-size:1.6rem;line-height:1.2;margin:0 0 4px}
+h2{font-size:1.2rem;margin:0 0 8px}
+h3{font-size:1.02rem;margin:18px 0 6px}
+p{margin:0 0 10px}
+.lead{color:var(--mute);margin-bottom:12px}
+.disc{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:12px;padding:10px 14px;font-size:.92rem}
+.tabs{display:flex;gap:6px;margin:14px 0 12px}
+.tab{flex:1;min-height:48px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;font:inherit;font-weight:600;cursor:pointer;padding:0 6px}
+.tab.on{background:var(--acc);color:var(--acc-ink);border-color:transparent}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.step{font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-bottom:6px;font-weight:600}
+.note{color:var(--mute);font-size:.9rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{min-height:48px;padding:0 18px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600;cursor:pointer;touch-action:manipulation}
+.btn.primary{background:var(--acc);color:var(--acc-ink);border-color:transparent}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.tab:focus-visible,input:focus-visible+span,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+label.f{display:block;font-weight:600;margin-top:12px}
+input[type=text],textarea{width:100%;min-height:48px;margin-top:4px;padding:8px 12px;font:inherit;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}
+details{border:1px solid var(--line);border-radius:12px;padding:0 14px;margin-bottom:14px;background:var(--card)}
+summary{min-height:48px;display:flex;align-items:center;font-weight:600;cursor:pointer}
+details ul{margin:0 0 10px;padding-left:1.1em}
+details li{margin-bottom:4px}
+fieldset.q{border:0;border-top:1px solid var(--line);margin:0;padding:12px 0 4px}
+fieldset.q legend{padding:0;font-weight:500;margin-bottom:6px;float:left;width:100%}
+fieldset.q .pills{clear:both}
+.pills{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.pill{position:relative;display:block}
+.pill input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.pill span{display:flex;align-items:center;justify-content:center;min-height:48px;border:1.5px solid var(--line);border-radius:10px;font-weight:700;background:var(--bg)}
+.pill input:checked+span{background:var(--acc);color:var(--acc-ink);border-color:transparent}
+.scale{display:flex;justify-content:space-between;font-size:.78rem;color:var(--mute);margin:2px 2px 0}
+.grp{font-size:.8rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--acc);margin:16px 0 0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--soft);border-radius:12px;padding:10px 12px}
+.kpi b{display:block;font-size:1.5rem;line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.82rem;color:var(--mute)}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:12px;word-break:break-all;user-select:all;font-size:.95rem}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-size:.85rem;font-variant-numeric:tabular-nums}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{background:var(--soft)}
+.warn{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:10px;padding:8px 12px;font-size:.9rem;margin:10px 0}
+.msg{font-size:.9rem;margin-top:8px}.msg .bad{color:var(--bad)}.msg .good{color:var(--ok)}
+.bars{margin:8px 0}
+.bar{display:grid;grid-template-columns:5.5em 1fr 3em;gap:8px;align-items:center;margin:6px 0;font-size:.9rem}
+.bar .tr{height:14px;background:var(--line);border-radius:7px;overflow:hidden}
+.bar .tr i{display:block;height:100%;border-radius:7px}
+.bar b{text-align:right;font-variant-numeric:tabular-nums}
+.tri{display:block;width:100%;max-width:360px;margin:6px auto;height:auto}
+.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.zone{border-radius:12px;padding:8px;min-height:84px}
+.zone h4{margin:0 0 6px;font-size:.82rem}
+.zone.in{background:var(--zin)}.zone.mid{background:var(--zmid)}.zone.out{background:var(--zout)}
+.chip{display:inline-block;min-width:26px;padding:1px 7px;margin:2px;border-radius:8px;background:var(--card);border:1px solid var(--line);font-size:.8rem;text-align:center}
+ol.rec{padding-left:1.2em;margin:6px 0}
+ol.rec li{margin-bottom:8px}
+ol.rec li.weak{background:var(--warn-bg);border-radius:8px;padding:4px 8px;margin-left:-8px;list-style-position:inside}
+.foot{color:var(--mute);font-size:.82rem;margin:18px 0 28px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:9;max-width:90vw}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <h1>Motivatsiya kompasi</h1>
+  <p class="lead">Uch asosiy ehtiyoj (avtonomiya, kompetentlik, bog'liqlik) va «nega tibbiyotga kirdim» — qisqa o'zingni o'lcha metodi.</p>
+  <div class="disc" id="disc-top">Tashxis vositasi emas. O'quv maqsadida, validatsiyalanmagan. O'zbekcha bandlar rasmiy validatsiyadan o'tmagan. Natija sizni "turga" ajratmaydi.</div>
+</header>
+
+<main class="wrap">
+  <nav class="tabs" role="tablist" aria-label="Bo'limlar">
+    <button class="tab on" id="tb-test" role="tab" aria-selected="true" data-tab="test">Test</button>
+    <button class="tab" id="tb-result" role="tab" aria-selected="false" data-tab="result">Natija</button>
+    <button class="tab" id="tb-group" role="tab" aria-selected="false" data-tab="group">Guruh xaritasi</button>
+  </nav>
+
+  <section id="tab-test">
+    <details>
+      <summary>Nazariy asos (manbalar)</summary>
+      <ul>
+        <li><b>UMK, 12-mavzu:</b> motiv — faoliyatga undovchi sabab; motivatsiya — ehtiyoj, motiv, ustanovka va maqsadning ko'p darajali tizimi. Motivlar ichki yoki tashqi, anglangan yoki anglanmagan bo'lishi mumkin; ustanovka motiv bilan bir narsa emas.</li>
+        <li><b>Ivanov (310–313):</b> ehtiyoj → intilish (istak, tilak, xohish) → motivlar kurashi.</li>
+        <li><b>Cummings &amp; Sanders:</b> Lepper–Greene–Nisbett 1973 — ortiqcha asoslash (overjustification) effekti: tashqi mukofot ichki qiziqishni susaytirishi mumkin (540–541); qadriyat × kutilma (596); McClelland yutuq ehtiyoji nAch (858).</li>
+        <li><b>Bu metod:</b> o'z-o'zini belgilash nazariyasi (Self-Determination) dagi 3 ehtiyoj — avtonomiya, kompetentlik, bog'liqlik — va ichki/tashqi sabablar nisbati. <i>Tarixiy eslatma:</i> UMK dagi Maslou piramidasi ehtiyojlar tasnifi sifatida o'qitiladi, lekin uning empirik asosi zaif, shuning uchun bu yerda test qilinmaydi.</li>
+      </ul>
+    </details>
+    <div id="stage"></div>
+  </section>
+
+  <section id="tab-result" hidden><div id="resbox"></div></section>
+
+  <section id="tab-group" hidden>
+    <div class="card">
+      <h2>Guruh xaritasi</h2>
+      <p class="note">Kursdoshlaringiz yuborgan kodlarni (har qatorda bitta) shu yerga qo'ying. Ma'lumot faqat shu brauzerda (localStorage) saqlanadi — hech qayerga yuborilmaydi. Ism ixtiyoriy va mavzu sezgir: ismsiz kod (<code>-</code>) ham ishlaydi.</p>
+      <label class="f" for="gin">Kodlar</label>
+      <textarea id="gin" rows="5" placeholder="MK1-14-16-12-4.0-2.3-Ali"></textarea>
+      <div class="row">
+        <button class="btn primary" id="g-add">Qo'shish</button>
+        <button class="btn" id="g-own">O'z kodimni qo'shish</button>
+        <button class="btn" id="g-copy">Jadvalni nusxalash</button>
+        <button class="btn" id="g-clear">Tozalash</button>
+      </div>
+      <div class="msg" id="gmsg"></div>
+    </div>
+    <div class="card" id="gres"></div>
+  </section>
+
+  <p class="foot">Bandlar o'zimiz yozilgan (mualliflik huquqli shkalalardan, masalan AMS yoki BPNS dan, ko'chirilmagan). Natijalar o'zi tanlagan kichik guruhdan olinadi, shuning uchun umumlashma chiqarilmaydi.</p>
+</main>
+<div id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s){return document.querySelector(s)};
+var stage=$('#stage'),DISC=$('#disc-top').textContent;
+var LS={
+  get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}},
+  del:function(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var toastT;
+function toast(t){var el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},2200)}
+function copyText(t){
+  var fb=function(){try{var ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');ta.remove();return ok}catch(e){return false}};
+  if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(function(){return true},function(){return fb()});
+  return Promise.resolve(fb());
+}
+function copyToast(t){copyText(t).then(function(ok){toast(ok?'Nusxalandi':'Nusxalab bo\'lmadi — qo\'lda belgilab oling')})}
+function r1(x){return Math.round(x*10)/10}
+
+/* ---------- bandlar (o'zimiz yozdik; r = teskari) ---------- */
+var NEEDS={
+  A:{name:'Avtonomiya',en:'autonomy',color:'--cA',items:[
+    ['O\'qiydigan narsamni tanlashda o\'zimni erkin his qilaman.',0],
+    ['Ko\'p ishni «shart» bo\'lgani uchun emas, o\'zim xohlagani uchun qilaman.',0],
+    ['Hamma narsani boshqalar buyurgani uchun qilgandek tuyuladi.',1],
+    ['Vazifani o\'z yo\'lim bilan bajarishga ruxsat bor.',0]]},
+  K:{name:'Kompetentlik',en:'competence',color:'--cK',items:[
+    ['Qiyin mavzuni oxir-oqibat o\'zlashtira olaman.',0],
+    ['O\'qishda rivojlanayotganimni sezaman.',0],
+    ['Imtihonda nima kutayotganimni bilmay qolaman.',1],
+    ['Qilgan ishimdan «uddaladim» degan his olaman.',0]]},
+  B:{name:'Bog\'liqlik',en:'relatedness',color:'--cB',items:[
+    ['Kursdoshlarim orasida o\'zimni qabul qilingan his qilaman.',0],
+    ['Qiynalsam, so\'rashga odam topaman.',0],
+    ['O\'qishda o\'zimni yolg\'iz his qilaman.',1],
+    ['Birgalikda o\'qish menga yoqadi.',0]]}
+};
+var REASONS=[
+  ['Odamlarga yordam berish va inson tanasini tushunish meni qiziqtiradi.','ichki'],
+  ['O\'qish jarayonining o\'zi menga yoqadi.','ichki'],
+  ['Oila va jamoatning umidi.','tashqi'],
+  ['Daromad va obro\'.','tashqi'],
+  ['Diplom va ish kafolati.','tashqi'],
+  ['Shaxsiy maqsad (masalan, ma\'lum bir mutaxassislik).','aralash']
+];
+var ORDER=[];for(var i=0;i<4;i++)['A','K','B'].forEach(function(n){ORDER.push({n:n,i:i})});
+
+var S={ans:{},reasons:{},name:''};   // ans['A0']=1..5 ; reasons[0..5]=1..5
+var own=LS.get('mk1_own',null);
+
+/* ---------- kod ---------- */
+var RX=/^MK1-(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d\.\d)-(\d\.\d)(?:-([\p{L}\p{N}]{1,12}|-)?)?$/iu;
+function mkCode(v,name){return 'MK1-'+[v.A,v.K,v.B,v.I.toFixed(1),v.E.toFixed(1)].join('-')+'-'+(name||'-')}
+function parseCode(s){
+  var m=RX.exec(String(s).trim());
+  if(!m)return {ok:false,why:'format mos emas'};
+  var v={A:+m[1],K:+m[2],B:+m[3],I:+m[4],E:+m[5]};
+  var lim=[['A',4,20],['K',4,20],['B',4,20],['I',1,5],['E',1,5]];
+  for(var i=0;i<lim.length;i++){var k=lim[i][0];if(v[k]<lim[i][1]||v[k]>lim[i][2])return {ok:false,why:k+'='+v[k]+' chegaradan tashqari ('+lim[i][1]+'…'+lim[i][2]+')'}}
+  var name=m[6]||'';if(name==='-')name='';
+  v.name=name;v.code=mkCode(v,name);
+  return {ok:true,rec:v};
+}
+function zone(d){return d>0.5?'in':d<-0.5?'out':'mid'}   // d = I − E
+var ZN={in:'Ichki ustun',mid:'Aralash (|farq|≤0.5)',out:'Tashqi ustun'};
+
+/* ---------- tablar ---------- */
+function showTab(name){
+  ['test','result','group'].forEach(function(t){
+    $('#tab-'+t).hidden=(t!==name);
+    var b=$('#tb-'+t);b.setAttribute('aria-selected',String(t===name));b.classList.toggle('on',t===name);
+  });
+  if(name==='test')viewTest();
+  if(name==='result')renderResult();
+  if(name==='group')renderGroup();
+  window.scrollTo(0,0);
+}
+document.querySelector('.tabs').addEventListener('click',function(e){var b=e.target.closest('[data-tab]');if(b)showTab(b.dataset.tab)});
+
+/* ---------- Test ---------- */
+function pills(name,val){
+  var h='<div class="pills">';
+  for(var v=1;v<=5;v++)h+='<label class="pill"><input type="radio" name="'+name+'" value="'+v+'"'+(val===v?' checked':'')+'><span>'+v+'</span></label>';
+  return h+'</div><div class="scale"><span>umuman mos emas</span><span>to\'liq mos</span></div>';
+}
+function viewTest(){
+  var h='<div class="card"><div class="step">1 · Uch ehtiyoj</div><h2>O\'qishdagi hozirgi holatim</h2>'+
+    '<p class="note">Oxirgi bir-ikki oy o\'qishingizni o\'ylab, har bandga 1–5 baho bering (1 — umuman mos emas, 5 — to\'liq mos).</p>';
+  ORDER.forEach(function(o,idx){
+    var it=NEEDS[o.n].items[o.i],key=o.n+o.i;
+    h+='<fieldset class="q"><legend>'+(idx+1)+'. '+it[0]+'</legend>'+pills('s_'+key,S.ans[key])+'</fieldset>';
+  });
+  h+='</div><div class="card"><div class="step">2 · Sabablar</div><h2>Nega tibbiyotga kirdingiz?</h2>'+
+    '<p class="note">Har bir sabab sizga qanchalik to\'g\'ri keladi? Bir nechta sabab bir vaqtda to\'g\'ri bo\'lishi mumkin.</p>';
+  REASONS.forEach(function(r,i){
+    h+='<fieldset class="q"><legend>'+(i+1)+'. '+r[0]+'</legend>'+pills('r_'+i,S.reasons[i])+'</fieldset>';
+  });
+  h+='</div><div class="card"><div class="step">3 · Kod</div>'+
+    '<label class="f" for="nm">Ism (ixtiyoriy — mavzu sezgir, bo\'sh qoldirsangiz kodda <code>-</code> bo\'ladi; harf/raqam, ≤12)</label>'+
+    '<input type="text" id="nm" maxlength="12" autocomplete="off" value="'+esc(S.name)+'">'+
+    '<div class="row"><button class="btn primary" id="calc" disabled>Natijani hisoblash</button></div>'+
+    '<p class="note" id="left" style="margin-top:8px"></p></div>';
+  stage.innerHTML=h;
+  upd();
+}
+function upd(){
+  var need=ORDER.length+REASONS.length,have=Object.keys(S.ans).length+Object.keys(S.reasons).length;
+  var b=$('#calc');if(!b)return;
+  b.disabled=have<need;
+  $('#left').textContent=have<need?'Javob berilmagan: '+(need-have)+' ta':'Hammasi to\'ldirilgan.';
+}
+stage.addEventListener('change',function(e){
+  var t=e.target;if(t.type!=='radio')return;
+  var v=+t.value;
+  if(t.name.indexOf('s_')===0)S.ans[t.name.slice(2)]=v;else S.reasons[+t.name.slice(2)]=v;
+  upd();
+});
+stage.addEventListener('input',function(e){
+  if(e.target.id==='nm'){e.target.value=e.target.value.replace(/[^\p{L}\p{N}]/gu,'').slice(0,12);S.name=e.target.value}
+});
+stage.addEventListener('click',function(e){
+  if(e.target.id==='calc')compute();
+});
+function compute(){
+  var v={A:0,K:0,B:0},rv={};
+  ['A','K','B'].forEach(function(n){
+    NEEDS[n].items.forEach(function(it,i){var a=S.ans[n+i];v[n]+=it[1]?6-a:a});
+  });
+  var rs=[0,1,2,3,4,5].map(function(i){return S.reasons[i]});
+  v.I=r1((rs[0]+rs[1])/2);
+  v.E=r1((rs[2]+rs[3]+rs[4])/3);
+  v.I=Math.min(5,Math.max(1,v.I));v.E=Math.min(5,Math.max(1,v.E));
+  var code=mkCode(v,S.name),p=parseCode(code);
+  if(!p.ok){toast('Kod hosil bo\'lmadi: '+p.why);return}
+  own={code:p.rec.code,v:{A:v.A,K:v.K,B:v.B,I:v.I,E:v.E},mix:rs[5],rs:rs,name:S.name};
+  LS.set('mk1_own',own);
+  showTab('result');
+}
+
+/* ---------- Natija ---------- */
+function kpi(v,l){return '<div class="kpi"><b>'+v+'</b><span>'+l+'</span></div>'}
+function triangle(v){
+  var P={A:[150,34],K:[34,236],B:[266,236]};
+  var w={A:v.A-3,K:v.K-3,B:v.B-3},s=w.A+w.K+w.B;
+  var x=(w.A*P.A[0]+w.K*P.K[0]+w.B*P.B[0])/s,y=(w.A*P.A[1]+w.K*P.K[1]+w.B*P.B[1])/s;
+  return '<svg class="tri" viewBox="0 0 300 280" role="img" aria-label="Uchburchak diagramma: avtonomiya '+v.A+', kompetentlik '+v.K+', bog\'liqlik '+v.B+'">'+
+    '<polygon points="150,34 34,236 266,236" fill="none" stroke="var(--line)" stroke-width="2"/>'+
+    '<polygon points="150,135 92,236 208,236" fill="none" stroke="var(--line)" stroke-dasharray="3 4"/>'+
+    '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="9" fill="var(--acc)" stroke="var(--card)" stroke-width="3"/>'+
+    '<text x="150" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="var(--cA)">Avtonomiya '+v.A+'</text>'+
+    '<text x="34" y="258" text-anchor="start" font-size="13" font-weight="700" fill="var(--cK)">Kompetentlik '+v.K+'</text>'+
+    '<text x="266" y="274" text-anchor="end" font-size="13" font-weight="700" fill="var(--cB)">Bog\'liqlik '+v.B+'</text></svg>';
+}
+function needBars(v){
+  return '<div class="bars">'+['A','K','B'].map(function(n){
+    return '<div class="bar"><span>'+NEEDS[n].name+'</span><div class="tr"><i style="width:'+((v[n]-4)/16*100)+'%;background:var('+NEEDS[n].color+')"></i></div><b>'+v[n]+'</b></div>';
+  }).join('')+'</div>';
+}
+var RECS={
+  A:'Bugun qaysi bir vazifani o\'zim tanlab yoki o\'z usulimda bajara olaman (mavzu tartibi, o\'qish vaqti, taqdimot shakli)?',
+  K:'Qaysi mavzuda oldinga siljiganimni ko\'rsata oladigan kichik, o\'lchanadigan maqsad qo\'ya olaman (masalan, 10 ta savoldan 8 tasi)?',
+  B:'Kim bilan birga o\'qisam yoki kimdan so\'ray olaman (juft, kichik guruh, yuqori kurs)?'
+};
+function renderResult(){
+  var box=$('#resbox');
+  if(!own){box.innerHTML='<div class="card"><h2>Natija hali yo\'q</h2><p>Avval «Test» bo\'limidagi savollarga javob bering.</p><div class="row"><button class="btn primary" id="r-go">Testga o\'tish</button></div></div>';$('#r-go').addEventListener('click',function(){showTab('test')});return}
+  var v=own.v,d=r1(v.I-v.E),min=Math.min(v.A,v.K,v.B);
+  var weak=['A','K','B'].filter(function(n){return v[n]===min});
+  var h='<div class="card"><div class="disc">'+esc(DISC)+'</div>'+
+    '<h2 style="margin-top:14px">Sizning natijangiz'+(own.name?', '+esc(own.name):'')+'</h2>'+
+    '<h3>Uch ehtiyoj (har biri 4–20)</h3>'+triangle(v)+needBars(v)+
+    '<p class="note">Nuqta uchburchakda ehtiyojlar <i>nisbatini</i> ko\'rsatadi (umumiy darajani emas); har ehtiyojning o\'zi — chiziqchalarda.</p>'+
+    '<h3>Ichki va tashqi sabablar</h3><div class="kpis">'+kpi(v.I.toFixed(1),'Ichki sabablar o\'rtachasi (1–5)')+kpi(v.E.toFixed(1),'Tashqi sabablar o\'rtachasi (1–5)')+kpi((d>0?'+':'')+d.toFixed(1),'Ichki − tashqi')+kpi(own.mix,'Shaxsiy maqsad (aralash), 1–5')+'</div>'+
+    '<p class="note" style="margin-top:8px">Ichki va tashqi motiv bir-birini istisno qilmaydi: ikkalasi ham baland bo\'lishi mumkin (aralash). Bu sizni «ichki» yoki «tashqi» turga ajratmaydi — uzluksiz o\'lcham.</p>'+
+    '<h3>O\'zingizga 3 savol (tashxis emas)</h3><ol class="rec">'+
+    ['A','K','B'].map(function(n){return '<li'+(weak.indexOf(n)>=0?' class="weak"':'')+'><b>'+NEEDS[n].name+':</b> '+RECS[n]+(weak.indexOf(n)>=0?' <i>(hozircha eng past ball — shunga e\'tibor bering)</i>':'')+'</li>'}).join('')+'</ol>'+
+    '<h3>Kodingiz (kursdoshingizga yuboring)</h3><div class="code" id="mycode">'+esc(own.code)+'</div>'+
+    '<div class="row"><button class="btn primary" id="r-copy">Kodni nusxalash</button><button class="btn" id="r-add">Guruh xaritasiga qo\'shish</button></div>'+
+    '<h3>Bu bizga nimani o\'rgatdi</h3><ol>'+
+    '<li>Motivatsiya bitta narsa emas, zanjir: ehtiyoj → motiv → ustanovka → maqsad (UMK 12-mavzu); bu yerda faqat ehtiyoj va motiv qatlamini o\'lchadik.</li>'+
+    '<li>Ichki va tashqi sabablar birga yashaydi, va tashqi mukofot ba\'zan ichki qiziqishni susaytirishi mumkin (Lepper–Greene–Nisbett 1973; Cummings &amp; Sanders, 540–541) — shuning uchun «ichki yaxshi, tashqi yomon» deb bo\'lmaydi.</li>'+
+    '<li>Uzluksiz o\'lchamni «ichki/tashqi tur»ga bo\'lish beqaror: chegara 0.5 ballga siljisa, ko\'p kishi boshqa toifaga o\'tadi (Guruh xaritasi bo\'limidagi sezgirlik blokiga qarang), shuning uchun kichik tanlanmada «tip» chiqarmang.</li></ol>'+
+    '<div class="row"><button class="btn" id="r-redo">Qaytadan o\'tish</button></div></div>';
+  box.innerHTML=h;
+  $('#r-copy').addEventListener('click',function(){copyToast(own.code)});
+  $('#r-add').addEventListener('click',function(){addCodes([own.code]);toast('Guruh xaritasiga qo\'shildi')});
+  $('#r-redo').addEventListener('click',function(){S={ans:{},reasons:{},name:''};showTab('test')});
+}
+
+/* ---------- Guruh ---------- */
+function addCodes(tokens){
+  var list=LS.get('mk1_group',[]);if(!Array.isArray(list))list=[];
+  var have={};list.forEach(function(c){var p=parseCode(c);if(p.ok)have[p.rec.code]=1});
+  var added=0,dup=0,bad=[];
+  tokens.forEach(function(t){
+    var p=parseCode(t);
+    if(!p.ok){bad.push({t:t,why:p.why});return}
+    if(have[p.rec.code]){dup++;return}
+    have[p.rec.code]=1;list.push(p.rec.code);added++;
+  });
+  LS.set('mk1_group',list);
+  return {added:added,dup:dup,bad:bad};
+}
+function groupRecs(){
+  var list=LS.get('mk1_group',[]);if(!Array.isArray(list))list=[];
+  var r=[];list.forEach(function(c){var p=parseCode(c);if(p.ok)r.push(p.rec)});return r;
+}
+var showNames=false,clearArm=false;
+function sens(recs){
+  var n=recs.length,ds=recs.map(function(r){return r1(r.I-r.E)});
+  // ichki ustun: d > t. Asosiy t=0; t=±0.5 ga siljitamiz.
+  function cls(d,t){return d>t}
+  var base=ds.map(function(d){return cls(d,0)});
+  var up=ds.filter(function(d,i){return cls(d,0.5)!==base[i]}).length;
+  var dn=ds.filter(function(d,i){return cls(d,-0.5)!==base[i]}).length;
+  return {n:n,ds:ds,inside:base.filter(Boolean).length,up:up,dn:dn};
+}
+function renderGroup(){
+  $('#g-own').hidden=!own;
+  var recs=groupRecs(),n=recs.length,res=$('#gres');
+  if(!n){res.innerHTML='<h2>Guruh natijalari</h2><p class="note">Hozircha kod yo\'q. Yuqoridagi maydonga kodlarni qo\'ying.</p>';return}
+  var mean=function(k){return recs.reduce(function(a,r){return a+r[k]},0)/n};
+  var m={A:mean('A'),K:mean('K'),B:mean('B'),I:mean('I'),E:mean('E')};
+  var minM=Math.min(m.A,m.K,m.B),weak=['A','K','B'].filter(function(k){return Math.abs(m[k]-minM)<1e-9});
+  var h='<h2>Guruh natijalari (n='+n+')</h2>'+
+    (n<15?'<div class="warn">Guruh n='+n+' (<15): o\'rtachalar va toifa sonlari kichik tanlanmada beqaror — taxminiy deb qabul qiling.</div>':'<div class="warn">Tanlanma kichik va o\'zi tanlagan: umumlashma chiqarmang.</div>')+
+    '<h3>Ehtiyojlar bo\'yicha guruh o\'rtachasi (4–20)</h3>'+
+    '<div class="bars">'+['A','K','B'].map(function(k){return '<div class="bar"><span>'+NEEDS[k].name+'</span><div class="tr"><i style="width:'+((m[k]-4)/16*100)+'%;background:var('+NEEDS[k].color+')"></i></div><b>'+m[k].toFixed(1)+'</b></div>'}).join('')+'</div>'+
+    '<p>Eng zaif ehtiyoj: <b>'+weak.map(function(k){return NEEDS[k].name}).join(', ')+'</b> (o\'rtacha '+minM.toFixed(1)+').</p>'+
+    '<h3>Ichki — tashqi taqsimot</h3><div class="kpis">'+kpi(m.I.toFixed(1),'Ichki o\'rtacha (1–5)')+kpi(m.E.toFixed(1),'Tashqi o\'rtacha (1–5)')+'</div>';
+  var Z={in:[],mid:[],out:[]};
+  recs.forEach(function(r,i){var d=r1(r.I-r.E);Z[zone(d)].push({i:i+1,r:r,d:d})});
+  h+='<div class="zones">'+['in','mid','out'].map(function(z){
+    return '<div class="zone '+z+'"><h4>'+ZN[z]+': '+Z[z].length+'</h4>'+Z[z].map(function(o){return '<span class="chip">'+(showNames&&o.r.name?esc(o.r.name):o.i)+'</span>'}).join('')+'</div>';
+  }).join('')+'</div>'+
+    '<label style="display:flex;align-items:center;gap:10px;min-height:48px"><input type="checkbox" id="g-names"'+(showNames?' checked':'')+' style="width:22px;height:22px"> Ismlarni ko\'rsat (standart: anonim, raqamlar)</label>';
+  var s=sens(recs),pc=function(x){return Math.round(x/n*100)};
+  h+='<h3>Chegara 0.5 ball surilsa nima o\'zgaradi</h3>'+
+    '<p>«Ichki ustun» = ichki − tashqi &gt; 0 deb olsak, guruhda <b>'+s.inside+'</b> / '+n+' kishi «ichki». Chegara +0.5 ga surilsa, <b>'+s.up+'</b> kishi ('+pc(s.up)+'%), −0.5 ga surilsa <b>'+s.dn+'</b> kishi ('+pc(s.dn)+'%) boshqa toifaga o\'tadi.</p>'+
+    '<div class="warn">Xulosa: uzluksiz o\'lchamni «tip»ga bo\'lish beqaror — toifa chegaraga yaqin odamlarga bog\'liq. Shuning uchun natijani «ichki/tashqi odam» emas, o\'lcham sifatida o\'qing.</div>'+
+    '<h3>To\'liq jadval</h3><div class="tw"><table><thead><tr><th>#</th>'+(showNames?'<th>Ism</th>':'')+'<th>A</th><th>K</th><th>B</th><th>I</th><th>E</th><th>I−E</th></tr></thead><tbody>'+
+    recs.map(function(r,i){var d=r1(r.I-r.E);return '<tr><td>'+(i+1)+'</td>'+(showNames?'<td>'+(r.name?esc(r.name):'—')+'</td>':'')+'<td>'+r.A+'</td><td>'+r.K+'</td><td>'+r.B+'</td><td>'+r.I.toFixed(1)+'</td><td>'+r.E.toFixed(1)+'</td><td>'+(d>0?'+':'')+d.toFixed(1)+'</td></tr>'}).join('')+'</tbody></table></div>';
+  res.innerHTML=h;
+}
+$('#gres').addEventListener('change',function(e){if(e.target.id==='g-names'){showNames=e.target.checked;renderGroup()}});
+function tsv(){
+  var rows=['Ism\tA\tK\tB\tI\tE\tI-E'];
+  groupRecs().forEach(function(r){rows.push([showNames&&r.name?r.name:'anonim',r.A,r.K,r.B,r.I.toFixed(1),r.E.toFixed(1),r1(r.I-r.E).toFixed(1)].join('\t'))});
+  return rows.join('\n');
+}
+$('#g-add').addEventListener('click',function(){
+  var ta=$('#gin'),tokens=ta.value.split(/[\s,;]+/).filter(Boolean),msg=$('#gmsg');
+  if(!tokens.length){msg.innerHTML='<span class="bad">Maydon bo\'sh.</span>';return}
+  var r=addCodes(tokens);
+  msg.innerHTML='<span class="good">Qo\'shildi: '+r.added+'</span>'+(r.dup?' · takrorlangan (o\'tkazib yuborildi): '+r.dup:'')+(r.bad.length?' · <span class="bad">rad etildi: '+r.bad.length+'</span><ul>'+r.bad.map(function(b){return '<li><code>'+esc(b.t.slice(0,60))+'</code> — '+esc(b.why)+'</li>'}).join('')+'</ul>':'');
+  if(!r.bad.length)ta.value='';
+  renderGroup();
+});
+$('#g-own').addEventListener('click',function(){
+  if(!own)return;var r=addCodes([own.code]);
+  $('#gmsg').innerHTML=r.added?'<span class="good">Kodingiz qo\'shildi.</span>':'Kodingiz allaqachon ro\'yxatda.';renderGroup();
+});
+$('#g-copy').addEventListener('click',function(){if(!groupRecs().length){toast('Jadval bo\'sh');return}copyToast(tsv())});
+$('#g-clear').addEventListener('click',function(){
+  var b=this;
+  if(!clearArm){clearArm=true;b.textContent='Aniq tozalaymi? Yana bosing';setTimeout(function(){clearArm=false;b.textContent='Tozalash'},3000);return}
+  clearArm=false;b.textContent='Tozalash';LS.del('mk1_group');$('#gmsg').textContent='Guruh ro\'yxati tozalandi.';renderGroup();
+});
+
+showTab('test');
+})();
+</script>
+</body>
+</html>

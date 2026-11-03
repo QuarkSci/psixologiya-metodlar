@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Qobiliyat laboratoriyasi</title>
+<style>
+:root{
+  --bg:#f5f4ef;--card:#fff;--ink:#1d2330;--mute:#5b6577;--line:#dad7cd;
+  --acc:#2f5de0;--acc-ink:#fff;--soft:#eef1fb;--warn-bg:#fff4d6;--warn-line:#e0b23a;
+  --ok:#17794f;--bad:#b3410c;--over:#fde7bd;--under:#d6e4ff;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#12141a;--card:#1b1e27;--ink:#e8eaf1;--mute:#9aa3b5;--line:#2d3242;
+  --acc:#7a9cff;--acc-ink:#0b1022;--soft:#232944;--warn-bg:#2b2410;--warn-line:#8a6d1e;
+  --ok:#5dd6a0;--bad:#ff9a6b;--over:#4a3a12;--under:#1f2f55}
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header.wrap{padding-top:20px}
+h1{font-size:1.6rem;line-height:1.2;margin:0 0 4px}
+h2{font-size:1.2rem;margin:0 0 8px}
+h3{font-size:1.02rem;margin:18px 0 6px}
+p{margin:0 0 10px}
+.lead{color:var(--mute);margin-bottom:12px}
+.disc{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:12px;padding:10px 14px;font-size:.92rem}
+.tabs{display:flex;gap:6px;margin:14px 0 12px}
+.tab{flex:1;min-height:48px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;font:inherit;font-weight:600;cursor:pointer;padding:0 6px}
+.tab.on{background:var(--acc);color:var(--acc-ink);border-color:transparent}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card.center{text-align:center}
+.step{font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-bottom:6px;font-weight:600}
+.note,.hint{color:var(--mute);font-size:.9rem}
+.okmsg{color:var(--ok);font-weight:600;margin-top:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{min-height:48px;padding:0 18px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600;cursor:pointer;touch-action:manipulation}
+.btn.primary{background:var(--acc);color:var(--acc-ink);border-color:transparent}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.tab:focus-visible,.opt:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+label{display:block;font-weight:600;margin-top:12px}
+input[type=text],select,textarea{width:100%;min-height:48px;margin-top:4px;padding:8px 12px;font:inherit;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}
+input[type=range]{width:100%;height:48px;margin:2px 0 0;accent-color:var(--acc)}
+.slh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sv{font-variant-numeric:tabular-nums;font-weight:700;color:var(--acc);min-width:2.5em;text-align:right}
+.sl{margin-top:14px}
+details{border:1px solid var(--line);border-radius:12px;padding:0 14px;margin-bottom:14px;background:var(--card)}
+summary{min-height:48px;display:flex;align-items:center;font-weight:600;cursor:pointer}
+details ul{margin:0 0 10px;padding-left:1.1em}
+details li{margin-bottom:4px}
+.stim{background:var(--soft);border-radius:14px;min-height:150px;display:flex;align-items:center;justify-content:center;margin:8px 0 12px;text-align:center;padding:8px}
+.stim.dark{background:#14161c;color:#fff}
+.big{font-size:4rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.big.sm{font-size:1.1rem;font-weight:600;line-height:1.3}
+.word{font-size:3.2rem;font-weight:800;letter-spacing:.04em}
+.entry{text-align:center;font-size:1.6rem;letter-spacing:.3em;min-height:2.2rem;font-variant-numeric:tabular-nums;margin-bottom:8px}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.keypad button{min-height:56px;font-size:1.4rem;font-weight:700;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.keypad button.wide{grid-column:1/-1;font-size:1.1rem}
+.ans-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ans-grid .btn{min-height:64px;font-size:1.1rem}
+kbd{font:inherit;font-size:.75rem;opacity:.6;border:1px solid currentColor;border-radius:4px;padding:0 5px;margin-right:6px}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0 10px}
+.bar i{display:block;height:100%;width:100%;background:var(--acc)}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:300px;margin:6px auto 0}
+.mcell{aspect-ratio:1;border:1.5px solid var(--line);border-radius:10px;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.mcell svg{width:86%;height:86%}
+.mcell.q{border-style:dashed;font-size:2rem;font-weight:700;color:var(--acc)}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:420px;margin:12px auto}
+.opt{aspect-ratio:1.25;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.opt svg{width:80%;height:80%}
+.dkey{display:grid;grid-template-columns:repeat(9,1fr);gap:2px;margin-bottom:6px}
+.dkey div{border:1px solid var(--line);border-radius:6px;text-align:center;padding:3px 0;font-weight:700;font-size:.85rem;line-height:1.2}
+.dkey svg{width:70%;height:auto;display:block;margin:0 auto}
+.tg{width:84px;height:84px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--soft);border-radius:12px;padding:10px 12px}
+.kpi b{display:block;font-size:1.5rem;line-height:1.2;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.82rem;color:var(--mute)}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:12px;word-break:break-all;user-select:all;font-size:.95rem}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-size:.85rem;font-variant-numeric:tabular-nums}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
+th{background:var(--soft);position:sticky;top:0}
+td.over{background:var(--over)}td.under{background:var(--under)}
+.msg{font-size:.9rem;margin-top:8px}
+.msg .bad{color:var(--bad)}
+.msg .good{color:var(--ok)}
+.warn{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:10px;padding:8px 12px;font-size:.9rem;margin:10px 0}
+.foot{color:var(--mute);font-size:.82rem;margin:18px 0 28px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:9;max-width:90vw}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <h1>Qobiliyat laboratoriyasi</h1>
+  <p class="lead">4 ta qisqa vazifa va o'zingizni baholash. «O'zingni o'lcha» metodi: qobiliyat (ability) mavzusi.</p>
+  <div class="disc" id="disc-top">Tashxis vositasi emas. O'quv maqsadida, validatsiyalanmagan. O'zbekcha bandlar rasmiy validatsiyadan o'tmagan. Natija sizni "turga" ajratmaydi.</div>
+</header>
+
+<main class="wrap">
+  <nav class="tabs" role="tablist" aria-label="Bo'limlar">
+    <button class="tab on" id="tb-test" role="tab" aria-selected="true" data-tab="test">Test</button>
+    <button class="tab" id="tb-result" role="tab" aria-selected="false" data-tab="result">Natija</button>
+    <button class="tab" id="tb-group" role="tab" aria-selected="false" data-tab="group">Guruh xaritasi</button>
+  </nav>
+
+  <section id="tab-test">
+    <details>
+      <summary>Nazariy asos (manbalar)</summary>
+      <ul>
+        <li><b>Layoqat → qobiliyat → iste'dod</b> (Ivanov, 386–389): layoqat — tug'ma «tabiiy zamin» (urug'); qobiliyat — faoliyatda rivojlangan holat; iste'dod — qobiliyatlar majmuining yuqori darajasi. Qobiliyat bilim bilan bir narsa emas: u bilim olish tezligini belgilaydi.</li>
+        <li><b>UMK, 11-mavzu:</b> qobiliyat — imkoniyat, mahorat — haqiqat; qobiliyat faqat faoliyatda namoyon bo'ladi; umumiy va maxsus qobiliyatlar farqlanadi; tayanch xususiyat — kuzatuvchanlik.</li>
+        <li><b>Cummings &amp; Sanders:</b> Spearman umumiy omil <i>g</i> (469); Thurstone 7 birlamchi qobiliyat (469); Sternberg triarxik nazariya (469–470); Flynn effekti (472).</li>
+        <li><b>Vazifalar nimaga yaqin:</b> V1 — ishchi xotira; V2 — diqqat nazorati va javob tezligi; V3 — mantiqiy xulosa (matritsa); V4 — axborotni qayta ishlash tezligi. Bular qobiliyatning qo'pol ko'rsatkichlari, xolos.</li>
+      </ul>
+    </details>
+    <div id="stage" aria-live="polite"></div>
+  </section>
+
+  <section id="tab-result" hidden><div id="resbox"></div></section>
+
+  <section id="tab-group" hidden>
+    <div class="card">
+      <h2>Guruh xaritasi</h2>
+      <p class="note">Kursdoshlaringiz yuborgan kodlarni (har qatorda bitta) shu yerga qo'ying. Ma'lumot faqat shu brauzerda (localStorage) saqlanadi — hech qayerga yuborilmaydi.</p>
+      <label for="gin">Kodlar</label>
+      <textarea id="gin" rows="5" placeholder="QL1-8-6-620-110-6-34-70-60-80-Ali"></textarea>
+      <div class="row">
+        <button class="btn primary" id="g-add">Qo'shish</button>
+        <button class="btn" id="g-own">O'z kodimni qo'shish</button>
+        <button class="btn" id="g-copy">Jadvalni nusxalash</button>
+        <button class="btn" id="g-clear">Tozalash</button>
+      </div>
+      <div class="msg" id="gmsg"></div>
+    </div>
+    <div class="card" id="gres"></div>
+  </section>
+
+  <p class="foot">Matritsa savollari va barcha bandlar o'zimiz tuzilgan (Raven yoki boshqa mualliflik huquqli testlardan ko'chirilmagan). Natijalar o'zi tanlagan kichik guruhdan olinadi, shuning uchun umumlashma chiqarilmaydi.</p>
+</main>
+<div id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s){return document.querySelector(s)};
+var stage=$('#stage');
+var DISC=$('#disc-top').textContent;
+
+/* ---------- yordamchilar ---------- */
+var LS={
+  get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}},
+  del:function(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+function rnd(n){return Math.floor(Math.random()*n)}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=rnd(i+1);var t=a[i];a[i]=a[j];a[j]=t}return a}
+function median(a){if(!a.length)return NaN;var s=a.slice().sort(function(x,y){return x-y}),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function detectDevice(){try{return matchMedia('(pointer:coarse)').matches?'touch':'mouse'}catch(e){return 'mouse'}}
+var toastT;
+function toast(t){var el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},2200)}
+function copyText(t){
+  var fallback=function(){try{var ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');ta.remove();return ok}catch(e){return false}};
+  if(navigator.clipboard&&navigator.clipboard.writeText){return navigator.clipboard.writeText(t).then(function(){return true},function(){return fallback()})}
+  return Promise.resolve(fallback());
+}
+function copyWithToast(t){copyText(t).then(function(ok){toast(ok?'Nusxalandi':'Nusxalab bo\'lmadi — qo\'lda belgilab oling')})}
+
+/* ---------- holat ---------- */
+var S={E:[50,50,50],touched:[false,false,false],name:'',device:detectDevice(),F:0,B:0,RT:0,ST:0,err:0,M:0,D:0,Dwrong:0};
+var PRACT={};
+var phase='intro';
+var own=LS.get('ql1_own',null);
+var RUN=null,timers=[],ivs=[];
+function later(fn,ms){var id=setTimeout(fn,ms);timers.push(id);return id}
+function every(fn,ms){var id=setInterval(fn,ms);ivs.push(id);return id}
+function cleanup(){timers.forEach(clearTimeout);ivs.forEach(clearInterval);timers=[];ivs=[];RUN=null}
+
+/* ---------- kod ---------- */
+var RX=/^QL1-(\d{1,2})-(\d{1,2})-(\d{3,4})-(-?\d{1,3})-(\d)-(\d{1,2})-(\d{1,3})-(\d{1,3})-(\d{1,3})(?:-([\p{L}\p{N}]{1,12}|-)?)?$/iu;
+function mkCode(v,name){return 'QL1-'+[v.F,v.B,v.RT,v.ST,v.M,v.D,v.E1,v.E2,v.E3].join('-')+'-'+(name||'-')}
+function parseCode(s){
+  s=String(s).trim();
+  var m=RX.exec(s);
+  if(!m)return {ok:false,why:'format mos emas'};
+  var n=m.slice(1,10).map(Number);
+  var v={F:n[0],B:n[1],RT:n[2],ST:n[3],M:n[4],D:n[5],E1:n[6],E2:n[7],E3:n[8]};
+  var lim=[['F',2,12],['B',2,12],['RT',150,1500],['ST',-200,600],['M',0,8],['D',0,60],['E1',0,100],['E2',0,100],['E3',0,100]];
+  for(var i=0;i<lim.length;i++){var k=lim[i][0];if(v[k]<lim[i][1]||v[k]>lim[i][2])return {ok:false,why:k+'='+v[k]+' chegaradan tashqari ('+lim[i][1]+'…'+lim[i][2]+')'}}
+  var name=m[10]||'';if(name==='-')name='';
+  v.name=name;v.code=mkCode(v,name);
+  return {ok:true,rec:v};
+}
+
+/* ---------- foiz (percentil) hisobi ---------- */
+function pctRank(vals,v){var below=0,eq=0;vals.forEach(function(x){if(x<v)below++;else if(x===v)eq++});return (below+0.5*eq)/vals.length*100}
+function computeStats(recs){
+  var mem=recs.map(function(r){return r.F+r.B}),nrt=recs.map(function(r){return -r.RT}),dd=recs.map(function(r){return r.D}),lg=recs.map(function(r){return r.M});
+  return recs.map(function(r,i){
+    var p=[pctRank(mem,mem[i]),(pctRank(nrt,nrt[i])+pctRank(dd,dd[i]))/2,pctRank(lg,lg[i])];
+    return {r:r,p:p,gap:[r.E1-p[0],r.E2-p[1],r.E3-p[2]]};
+  });
+}
+function groupRecs(){
+  var list=LS.get('ql1_group',[]);if(!Array.isArray(list))list=[];
+  var recs=[];list.forEach(function(c){var p=parseCode(c);if(p.ok)recs.push(p.rec)});
+  return recs;
+}
+var MIN_N=5,OK_N=15;
+
+/* ---------- tablar ---------- */
+function showTab(name){
+  cleanup();
+  ['test','result','group'].forEach(function(t){
+    $('#tab-'+t).hidden=(t!==name);
+    var b=$('#tb-'+t);b.setAttribute('aria-selected',String(t===name));b.classList.toggle('on',t===name);
+  });
+  if(name==='test')goPhase(phase);
+  if(name==='result')renderResult();
+  if(name==='group')renderGroup();
+  window.scrollTo(0,0);
+}
+document.querySelector('.tabs').addEventListener('click',function(e){var b=e.target.closest('[data-tab]');if(b)showTab(b.dataset.tab)});
+
+/* ---------- SVG: shakllar va belgilar ---------- */
+var DOMN={shape:[0,1,2],fill:[0,1,2],size:[0,1,2],count:[1,2,3],rot:[0,1,2,3]};
+var D0={shape:0,fill:2,size:2,count:1,rot:0};
+function norm(sp){sp=Object.assign({},sp);if(sp.shape!==2)sp.rot=0;return sp}
+function mk(o){return norm(Object.assign({},D0,o))}
+function keyOf(sp){return [sp.shape,sp.fill,sp.size,sp.count,sp.rot].join('')}
+function shapeSVG(sp){
+  var sc=[0.62,0.82,1][sp.size];
+  var rad=[27,19,16][sp.count-1]*sc;
+  var pos=[[[50,50]],[[30,50],[70,50]],[[50,27],[28,71],[72,71]]][sp.count-1];
+  var fill=sp.fill===0?'none':'currentColor',fo=sp.fill===1?0.3:1;
+  var a='fill="'+fill+'" fill-opacity="'+fo+'" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"';
+  var out='';
+  pos.forEach(function(p){
+    var x=p[0],y=p[1];
+    if(sp.shape===0)out+='<circle cx="'+x+'" cy="'+y+'" r="'+rad+'" '+a+'/>';
+    else if(sp.shape===1)out+='<rect x="'+(x-rad)+'" y="'+(y-rad)+'" width="'+(2*rad)+'" height="'+(2*rad)+'" '+a+'/>';
+    else out+='<polygon points="'+x+','+(y-rad)+' '+(x+rad*0.95)+','+(y+rad*0.8)+' '+(x-rad*0.95)+','+(y+rad*0.8)+'" transform="rotate('+(sp.rot*90)+' '+x+' '+y+')" '+a+'/>';
+  });
+  return '<svg viewBox="0 0 100 100" aria-hidden="true">'+out+'</svg>';
+}
+var GLYPH=[
+  '<path d="M12 4v16M4 12h16"/>',
+  '<path d="M5 5l14 14M19 5L5 19"/>',
+  '<path d="M12 4l8 15H4z"/>',
+  '<rect x="5" y="5" width="14" height="14"/>',
+  '<circle cx="12" cy="12" r="7"/>',
+  '<path d="M12 3l8 9-8 9-8-9z"/>',
+  '<path d="M7 4v16h11"/>',
+  '<path d="M5 7l7 10 7-10"/>',
+  '<path d="M4 12h16"/>'
+];
+function glyph(i,cls){return '<svg class="'+(cls||'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+GLYPH[i]+'</svg>'}
+
+/* ---------- matritsa savollari (o'zimiz tuzgan, qoidalar bo'yicha) ---------- */
+var ITEMS=[
+  {act:['shape'],f:function(r,c){return {shape:(r+c)%3}}},
+  {act:['shape','count'],f:function(r,c){return {shape:r,count:c+1,fill:1}}},
+  {act:['shape','fill'],f:function(r,c){return {shape:r,fill:(r+c)%3}}},
+  {act:['size','fill'],f:function(r,c){return {shape:1,size:c,fill:r}}},
+  {act:['rot','fill'],f:function(r,c){return {shape:2,rot:(r+c)%4,fill:c}}},
+  {act:['shape','count'],f:function(r,c){return {shape:(r+c)%3,count:r+1}}},
+  {act:['size','fill'],f:function(r,c){return {size:(r+c)%3,fill:(r+2*c)%3}}},
+  {act:['shape','fill','count'],f:function(r,c){return {shape:(r+c)%3,fill:c,count:r+1}}}
+];
+var PITEM={act:['shape'],f:function(r){return {shape:r}}};
+function cellOf(it,r,c){return mk(it.f(r,c))}
+function distractors(it){
+  var ans=cellOf(it,2,2),seen={},out=[];
+  seen[keyOf(ans)]=1;
+  function add(sp){sp=norm(sp);var k=keyOf(sp);if(!seen[k]){seen[k]=1;out.push(sp)}}
+  add(cellOf(it,2,1));add(cellOf(it,1,2));
+  var attrs=Object.keys(DOMN),inact=attrs.filter(function(a){return it.act.indexOf(a)<0});
+  function singles(list){
+    var r=[];list.forEach(function(a){DOMN[a].forEach(function(v){if(v!==ans[a]){var sp=Object.assign({},ans);sp[a]=v;r.push(sp)}})});
+    return shuffle(r);
+  }
+  singles(it.act).forEach(add);
+  singles(inact).forEach(add);
+  var guard=0;
+  while(out.length<5&&guard++<300){
+    var sp=Object.assign({},ans),a=attrs[rnd(attrs.length)],b=attrs[rnd(attrs.length)];
+    sp[a]=DOMN[a][rnd(DOMN[a].length)];sp[b]=DOMN[b][rnd(DOMN[b].length)];add(sp);
+  }
+  return out.slice(0,5);
+}
+
+/* ---------- delegatsiya ---------- */
+var ACTS={};
+stage.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act],[data-fast]');
+  if(!b||!stage.contains(b))return;
+  if(b.dataset.fast!==undefined){if(e.detail===0&&RUN&&RUN.fast)RUN.fast(+b.dataset.fast);return}
+  var fn=(RUN&&RUN.acts&&RUN.acts[b.dataset.act])||ACTS[b.dataset.act];
+  if(fn)fn(b);
+});
+stage.addEventListener('pointerdown',function(e){
+  var b=e.target.closest('[data-fast]');
+  if(b&&RUN&&RUN.fast){e.preventDefault();RUN.fast(+b.dataset.fast)}
+});
+document.addEventListener('keydown',function(e){
+  if(!RUN||!RUN.key||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement||{}).tagName||''))return;
+  RUN.key(e);
+});
+
+/* ---------- bosqichlar ---------- */
+var ORDER={v1f:'v1b',v1b:'v2',v2:'v3',v3:'v4'};
+function goPhase(p){
+  cleanup();phase=p;
+  if(p==='intro')viewIntro();
+  else if(p==='done')viewDone();
+  else viewInstr(p);
+  var top=$('#tab-test').getBoundingClientRect().top+window.scrollY-8;
+  if(window.scrollY>top)window.scrollTo(0,Math.max(0,top));
+}
+var INSTR={
+  v1f:{step:'1/4 · Raqamlar xotirasi (oldinga)',title:'Raqamlarni xuddi shu tartibda takrorlang',
+    body:'<p>Ekranda raqamlar birin-ketin (har biri 1 soniya) ko\'rinadi. Tugagach, ularni <b>ko\'rsatilgan tartibda</b> kiriting. 3 raqamdan boshlanadi; to\'g\'ri javobda 1 taga uzayadi. Ketma-ket 2 marta xato qilsangiz bu qism tugaydi (yoki 90 soniya o\'tsa).</p>',
+    note:'Mashq hisobga olinmaydi. Qog\'oz-qalam ishlatmang.',
+    practice:function(){runDigits('F',true)},start:function(){runDigits('F',false)}},
+  v1b:{step:'1/4 · Raqamlar xotirasi (orqaga)',title:'Raqamlarni teskari tartibda takrorlang',
+    body:'<p>Xuddi shunday, lekin raqamlarni <b>teskari tartibda</b> kiriting (oxirgisidan boshlab). Masalan, 4 · 7 · 2 ko\'rsangiz, 2 · 7 · 4 deb kiritasiz. 2 raqamdan boshlanadi.</p>',
+    note:'Ketma-ket 2 xato yoki 90 soniya — qism tugaydi.',
+    practice:function(){runDigits('B',true)},start:function(){runDigits('B',false)}},
+  v2:{step:'2/4 · Stroop + reaksiya',title:'So\'zning rangini toping',
+    body:'<p>Ekranda rang nomi yozilgan so\'z chiqadi. <b>So\'z nima deyishiga emas, qanday rangda yozilganiga</b> qarab, pastdagi tugmani bosing. Imkon qadar tez va xatosiz. Jami 20 urinish (klaviaturada 1–4 tugmalari ham ishlaydi).</p>',
+    note:'Reaksiya vaqti qurilmaga bog\'liq: sensorli ekran va sichqoncha farq qiladi.',
+    practice:function(){runStroop(true)},start:function(){runStroop(false)}},
+  v3:{step:'3/4 · Matritsa-mantiq',title:'Yetishmayotgan shaklni toping',
+    body:'<p>3×3 jadvalda shakllar ma\'lum qoida bilan o\'zgaradi; oxirgi katak bo\'sh («?»). Qoidani toping va pastdagi 6 variantdan to\'g\'risini tanlang. 8 ta savol, hammasiga <b>jami 90 soniya</b>. Bilmasangiz «O\'tkazib yuborish».</p>',
+    note:'Savollar o\'zimiz tuzilgan (Raven testi emas, undan nusxa emas).',
+    practice:function(){runMatrix(true)},start:function(){countdown(function(){runMatrix(false)})}},
+  v4:{step:'4/4 · Simvol–raqam',title:'Belgini raqamga almashtiring',
+    body:'<p>Tepada 9 ta belgi va ularga mos raqamlar kaliti turadi. Ekranda belgi chiqadi — kalit bo\'yicha <b>mos raqamni</b> bosing. 90 soniya ichida imkon qadar ko\'p <b>to\'g\'ri</b> javob bering (klaviaturada 1–9 ham ishlaydi).</p>',
+    note:'Xatolar ayirilmaydi, lekin to\'g\'ri sanalmaydi — shoshilganda ham aniqlikka e\'tibor bering.',
+    practice:function(){runDSST(true)},start:function(){countdown(function(){runDSST(false)})}}
+};
+ACTS.practice=function(b){var d=INSTR[b.dataset.key];if(d)d.practice()};
+ACTS.start=function(b){var d=INSTR[b.dataset.key];if(d)d.start()};
+
+function viewInstr(key){
+  var d=INSTR[key],ok=!!PRACT[key];
+  stage.innerHTML='<div class="card"><div class="step">'+d.step+'</div><h2>'+d.title+'</h2>'+d.body+
+    '<p class="note">'+d.note+'</p>'+
+    '<div class="row"><button class="btn'+(ok?'':' primary')+'" data-act="practice" data-key="'+key+'">Mashq qilish</button>'+
+    '<button class="btn'+(ok?' primary':'')+'" data-act="start" data-key="'+key+'"'+(ok?'':' disabled')+'>Boshlash (hisobga olinadi)</button></div>'+
+    (ok?'<p class="okmsg">✓ Mashq bajarildi — asosiy qismni boshlashingiz mumkin.</p>':'<p class="note" style="margin-top:10px">Asosiy qism mashqdan keyin ochiladi.</p>')+
+    '</div>';
+}
+
+function countdown(cb){
+  cleanup();
+  stage.innerHTML='<div class="card center"><div class="step">Tayyor bo\'ling</div><div class="big" id="cd">3</div></div>';
+  var n=3,el=$('#cd');
+  (function tick(){later(function(){n--;if(n<=0){cb();return}el.textContent=n;tick()},1000)})();
+}
+
+/* ---------- 0. Kirish va kalibratsiya ---------- */
+var SL=[
+  ['Xotira','raqamlar qatorini eslab qolish va takrorlash'],
+  ['Tezlik','tez javob berish, belgilarni tez almashtirish'],
+  ['Mantiq','naqshdagi qoidani topib, yetishmayotganini aniqlash']
+];
+function viewIntro(){
+  var h='<div class="card"><div class="step">0 · Kalibratsiya (testdan oldin)</div><h2>Avval o\'zingizni baholang</h2>'+
+    '<p>Kursdoshlaringiz guruhida har bir sohada o\'zingizni qayerda ko\'rasiz? <b>0–100 percentil</b> bilan belgilang: 50 — guruhning o\'rtasi, 80 — guruhdagi odamlarning taxminan 80% idan yuqori. Har bir sliderga tegib, qiymatni tasdiqlang.</p>';
+  SL.forEach(function(s,i){
+    h+='<div class="sl"><div class="slh"><b>'+s[0]+'</b><span class="sv" id="sv'+i+'">'+(S.touched[i]?S.E[i]:'—')+'</span></div>'+
+      '<span class="note">'+s[1]+'</span>'+
+      '<input type="range" min="0" max="100" step="1" value="'+S.E[i]+'" id="sl'+i+'" aria-label="'+s[0]+' — o\'z bahosi, percentil"></div>';
+  });
+  h+='<label for="nm">Ism (ixtiyoriy; harf/raqam, ko\'pi bilan 12 belgi)</label><input type="text" id="nm" maxlength="12" autocomplete="off" value="'+esc(S.name)+'">'+
+    '<label for="dev">Qurilma turi</label><select id="dev"><option value="touch"'+(S.device==='touch'?' selected':'')+'>Sensorli ekran (telefon/planshet)</option><option value="mouse"'+(S.device==='mouse'?' selected':'')+'>Sichqoncha/trekpad (kompyuter)</option></select>'+
+    '<div class="row"><button class="btn primary" id="go" disabled>Vazifalarni boshlash</button></div>';
+  if(own)h+='<p class="note" style="margin-top:12px">Oldingi natijangiz saqlangan — «Natija» bo\'limida. Qaytadan o\'tsangiz, u yangisi bilan almashadi.</p>';
+  h+='</div>';
+  stage.innerHTML=h;
+  var go=$('#go');
+  function upd(){go.disabled=!S.touched.every(Boolean)}
+  SL.forEach(function(_,i){
+    var el=$('#sl'+i);
+    function mark(){S.touched[i]=true;S.E[i]=+el.value;$('#sv'+i).textContent=el.value;upd()}
+    el.addEventListener('input',mark);el.addEventListener('change',mark);
+    el.addEventListener('pointerdown',function(){setTimeout(mark,0)});
+    el.addEventListener('keydown',function(){setTimeout(mark,0)});
+  });
+  $('#nm').addEventListener('input',function(){this.value=this.value.replace(/[^\p{L}\p{N}]/gu,'').slice(0,12);S.name=this.value});
+  $('#dev').addEventListener('change',function(){S.device=this.value});
+  upd();
+  go.addEventListener('click',function(){S.name=$('#nm').value.replace(/[^\p{L}\p{N}]/gu,'').slice(0,12);S.device=$('#dev').value;goPhase('v1f')});
+}
+
+/* ---------- V1. Raqamlar xotirasi ---------- */
+function runDigits(mode,practice){
+  cleanup();
+  var back=mode==='B',key=back?'v1b':'v1f';
+  var len=practice?2:(back?2:3),consec=0,best=0,t0=performance.now(),LIMIT=90000;
+  var seq=[],entry=[],accepting=false;
+  var pad='';for(var i=1;i<=9;i++)pad+='<button data-act="dg" data-v="'+i+'" aria-label="'+i+'">'+i+'</button>';
+  stage.innerHTML='<div class="card"><div class="step">'+(back?'Orqaga':'Oldinga')+(practice?' · MASHQ':'')+'</div>'+
+    '<div class="stim"><div class="big" id="big"></div></div>'+
+    '<div class="entry" id="entry" aria-live="polite"></div>'+
+    '<div class="keypad" id="kp" hidden>'+pad+'<button class="wide" data-act="del" aria-label="O\'chirish">⌫ O\'chirish</button></div></div>';
+  var big=$('#big'),kp=$('#kp'),ent=$('#entry');
+  function renderEntry(){var a=entry.slice();while(a.length<len)a.push('_');ent.textContent=a.join(' ')}
+  function present(){
+    entry=[];accepting=false;kp.hidden=true;ent.textContent='';
+    seq=[];for(var i=0;i<len;i++){var d;do{d=1+rnd(9)}while(i&&d===seq[i-1]);seq.push(d)}
+    big.className='big sm';big.textContent='Tayyor bo\'ling…';
+    var t=1000;
+    seq.forEach(function(d){
+      later(function(){big.className='big';big.textContent=d},t);
+      later(function(){big.textContent=''},t+750);
+      t+=1000;
+    });
+    later(function(){big.className='big sm';big.textContent=back?'Teskari tartibda kiriting':'Xuddi shu tartibda kiriting';kp.hidden=false;accepting=true;renderEntry()},t);
+  }
+  function submit(){
+    var exp=back?seq.slice().reverse():seq;
+    var ok=entry.every(function(d,i){return d===exp[i]});
+    if(practice){
+      kp.hidden=true;big.className='big sm';
+      big.textContent=ok?'✓ To\'g\'ri':'✗ To\'g\'risi: '+exp.join(' ');
+      later(function(){PRACT[key]=true;goPhase(key)},1600);
+      return;
+    }
+    if(ok){best=len;consec=0;len++}else consec++;
+    if(consec>=2||len>12||performance.now()-t0>LIMIT)return finish();
+    present();
+  }
+  function finish(){
+    var v=clamp(Math.max(2,best),2,12);
+    if(back){S.B=v;goPhase('v2')}else{S.F=v;goPhase('v1b')}
+  }
+  RUN={acts:{
+    dg:function(b){if(!accepting)return;entry.push(+b.dataset.v);renderEntry();if(entry.length===len){accepting=false;later(submit,250)}},
+    del:function(){if(!accepting)return;entry.pop();renderEntry()}
+  },key:function(e){
+    if(/^[1-9]$/.test(e.key))RUN.acts.dg({dataset:{v:e.key}});
+    else if(e.key==='Backspace')RUN.acts.del();
+  }};
+  present();
+}
+
+/* ---------- V2. Stroop ---------- */
+var COLORS=[{n:'Qizil',c:'#ff5a5a'},{n:'Ko\'k',c:'#5aa8ff'},{n:'Yashil',c:'#38d98a'},{n:'Sariq',c:'#ffd43b'}];
+function stroopTrials(practice){
+  var nc=practice?2:10,out=[],i,ink;
+  var pool=function(n){var a=[];for(var i=0;i<n;i++)a.push(i%4);return shuffle(a)};
+  pool(nc).forEach(function(c){out.push({word:c,ink:c,cong:true})});
+  pool(nc).forEach(function(c){var w;do{w=rnd(4)}while(w===c);out.push({word:w,ink:c,cong:false})});
+  return shuffle(out);
+}
+function runStroop(practice){
+  cleanup();
+  var trials=stroopTrials(practice),i=0,res=[],onset=0,active=false,tmo=null;
+  var btns='';COLORS.forEach(function(c,k){btns+='<button class="btn" data-fast="'+k+'"><kbd>'+(k+1)+'</kbd>'+c.n+'</button>'});
+  stage.innerHTML='<div class="card"><div class="step">'+(practice?'Mashq · ':'')+'Stroop · <span id="cnt">1/'+trials.length+'</span></div>'+
+    '<div class="stim dark"><div class="word" id="word">+</div></div>'+
+    '<div class="ans-grid">'+btns+'</div>'+
+    '<p class="hint" id="fb" style="margin-top:10px">So\'zning <b>yozilishiga emas, rangiga</b> qarab javob bering.</p></div>';
+  var word=$('#word'),fb=$('#fb'),cnt=$('#cnt');
+  function next(){
+    if(i>=trials.length)return end();
+    cnt.textContent=(i+1)+'/'+trials.length;
+    word.textContent='+';word.style.color='#fff';
+    later(function(){
+      var tr=trials[i];
+      word.textContent=COLORS[tr.word].n.toUpperCase();word.style.color=COLORS[tr.ink].c;
+      requestAnimationFrame(function(){onset=performance.now();active=true});
+      tmo=later(function(){respond(-1)},3200);
+    },500+rnd(400));
+  }
+  function respond(k){
+    if(!active)return;active=false;clearTimeout(tmo);
+    var rt=performance.now()-onset,tr=trials[i],ok=(k===tr.ink);
+    res.push({cong:tr.cong,rt:rt,ok:ok});
+    if(practice)fb.innerHTML=ok?'<span style="color:var(--ok)">✓ To\'g\'ri</span>':'<span style="color:var(--bad)">✗ Bu '+COLORS[tr.ink].n.toLowerCase()+' rang edi</span>';
+    i++;
+    word.textContent='+';word.style.color='#fff';
+    later(next,practice?500:0);
+  }
+  function end(){
+    if(practice){PRACT.v2=true;goPhase('v2');return}
+    var okr=res.filter(function(r){return r.ok}),c=okr.filter(function(r){return r.cong}).map(function(r){return r.rt}),n=okr.filter(function(r){return !r.cong}).map(function(r){return r.rt});
+    var rt=median(okr.map(function(r){return r.rt}));
+    S.RT=isNaN(rt)?1500:Math.round(rt);
+    S.ST=(c.length&&n.length)?Math.round(median(n)-median(c)):0;
+    S.err=res.length-okr.length;
+    goPhase('v3');
+  }
+  RUN={fast:respond,key:function(e){if(/^[1-4]$/.test(e.key))respond(+e.key-1)}};
+  next();
+}
+
+/* ---------- V3. Matritsa-mantiq ---------- */
+function runMatrix(practice){
+  cleanup();
+  var LIMIT=90000,list=practice?[PITEM]:ITEMS,k=0,score=0,cur=null,locked=false,over=false,t0=performance.now();
+  stage.innerHTML='<div class="card"><div class="step">'+(practice?'Mashq · ':'')+'Matritsa · savol <span id="cnt"></span>'+(practice?'':' · <span id="tm">90 s</span>')+'</div>'+
+    (practice?'':'<div class="bar"><i id="bar"></i></div>')+
+    '<div class="mgrid" id="mg"></div><div class="opts" id="op"></div>'+
+    '<p class="hint" id="fb" style="text-align:center"></p>'+
+    '<div class="row" style="justify-content:center"><button class="btn" data-act="skip">O\'tkazib yuborish</button></div></div>';
+  var mg=$('#mg'),op=$('#op'),cnt=$('#cnt'),fb=$('#fb');
+  function show(){
+    if(k>=list.length)return end();
+    var it=list[k],ans=cellOf(it,2,2),h='';
+    for(var r=0;r<3;r++)for(var c=0;c<3;c++)h+=(r===2&&c===2)?'<div class="mcell q" aria-label="Yetishmayotgan katak">?</div>':'<div class="mcell">'+shapeSVG(cellOf(it,r,c))+'</div>';
+    mg.innerHTML=h;
+    var opts=shuffle([ans].concat(distractors(it)));
+    cur={ans:keyOf(ans)};
+    op.innerHTML=opts.map(function(sp,i){return '<button class="opt" data-act="opt" data-k="'+keyOf(sp)+'" aria-label="Variant '+(i+1)+'">'+shapeSVG(sp)+'</button>'}).join('');
+    cnt.textContent=(k+1)+'/'+list.length;fb.textContent='';locked=false;
+  }
+  function end(){
+    if(over)return;over=true;
+    if(practice){PRACT.v3=true;goPhase('v3')}else{S.M=score;goPhase('v4')}
+  }
+  RUN={acts:{
+    opt:function(b){
+      if(over||locked)return;locked=true;
+      var ok=b.dataset.k===cur.ans;if(ok)score++;
+      if(practice){fb.innerHTML=ok?'<span style="color:var(--ok)">✓ To\'g\'ri</span>':'<span style="color:var(--bad)">✗ Noto\'g\'ri — qoida: har qatorda bitta shakl</span>';later(function(){k++;show()},1400)}
+      else{k++;show()}
+    },
+    skip:function(){if(over||locked)return;if(practice){PRACT.v3=true;goPhase('v3');return}k++;show()}
+  }};
+  if(!practice){
+    var bar=$('#bar'),tm=$('#tm');
+    every(function(){
+      var el=performance.now()-t0,left=Math.max(0,LIMIT-el);
+      bar.style.width=(left/LIMIT*100)+'%';tm.textContent=Math.ceil(left/1000)+' s';
+      if(el>=LIMIT)end();
+    },200);
+  }
+  show();
+}
+
+/* ---------- V4. Simvol–raqam ---------- */
+function runDSST(practice){
+  cleanup();
+  var LIMIT=90000,N=5,correct=0,wrong=0,cur=-1,count=0,done=false,t0=performance.now();
+  var key='';for(var i=0;i<9;i++)key+='<div>'+glyph(i)+(i+1)+'</div>';
+  var pad='';for(var j=0;j<9;j++)pad+='<button data-fast="'+j+'" aria-label="'+(j+1)+'">'+(j+1)+'</button>';
+  stage.innerHTML='<div class="card"><div class="step">'+(practice?'Mashq · ':'')+'Simvol–raqam'+(practice?'':' · <span id="tm">90 s</span>')+'</div>'+
+    (practice?'':'<div class="bar"><i id="bar"></i></div>')+
+    '<div class="dkey" aria-label="Kalit: belgi va raqam">'+key+'</div>'+
+    '<div class="stim"><span id="tgw"></span></div><div class="keypad">'+pad+'</div>'+
+    '<p class="hint" id="fb" style="text-align:center;margin-top:8px"></p></div>';
+  var tgw=$('#tgw'),fb=$('#fb');
+  function nextSym(){var n;do{n=rnd(9)}while(n===cur);cur=n;tgw.innerHTML=glyph(n,'tg')}
+  function end(){
+    if(done)return;done=true;
+    if(practice){PRACT.v4=true;goPhase('v4')}
+    else{S.D=correct;S.Dwrong=wrong;finishAll()}
+  }
+  RUN={fast:function(i){
+    if(done)return;
+    var ok=(i===cur);if(ok)correct++;else wrong++;count++;
+    if(practice){fb.innerHTML=ok?'<span style="color:var(--ok)">✓</span>':'<span style="color:var(--bad)">✗ To\'g\'ri raqam: '+(cur+1)+'</span>';if(count>=N){done=true;later(function(){PRACT.v4=true;goPhase('v4')},700);return}}
+    nextSym();
+  },key:function(e){if(/^[1-9]$/.test(e.key))RUN.fast(+e.key-1)}};
+  if(!practice){
+    var bar=$('#bar'),tm=$('#tm');
+    every(function(){
+      var el=performance.now()-t0,left=Math.max(0,LIMIT-el);
+      bar.style.width=(left/LIMIT*100)+'%';tm.textContent=Math.ceil(left/1000)+' s';
+      if(el>=LIMIT)end();
+    },200);
+  }
+  nextSym();
+}
+
+/* ---------- Yakun ---------- */
+function finishAll(){
+  var raw={F:S.F,B:S.B,RT:S.RT,ST:S.ST,M:S.M,D:S.D};
+  var v={F:clamp(S.F,2,12),B:clamp(S.B,2,12),RT:clamp(Math.round(S.RT),150,1500),ST:clamp(Math.round(S.ST),-200,600),M:clamp(S.M,0,8),D:clamp(S.D,0,60),E1:clamp(Math.round(S.E[0]),0,100),E2:clamp(Math.round(S.E[1]),0,100),E3:clamp(Math.round(S.E[2]),0,100)};
+  var clipped=Object.keys(raw).filter(function(k){return Math.round(raw[k])!==v[k]});
+  var code=mkCode(v,S.name);
+  var p=parseCode(code);
+  if(!p.ok){stage.innerHTML='<div class="card"><h2>Xatolik</h2><p>Kod hosil bo\'lmadi: '+esc(p.why)+'</p></div>';return}
+  own={code:p.rec.code,v:v,raw:raw,clipped:clipped,device:S.device,err:S.err,Dwrong:S.Dwrong,name:S.name,ts:Date.now()};
+  LS.set('ql1_own',own);
+  phase='done';
+  showTab('result');
+}
+function viewDone(){
+  stage.innerHTML='<div class="card"><h2>Hamma vazifa tugadi</h2><p>Natijangiz «Natija» bo\'limida.</p><div class="row"><button class="btn primary" data-act="toresult">Natijani ko\'rish</button><button class="btn" data-act="restart">Qaytadan boshlash</button></div></div>';
+}
+ACTS.toresult=function(){showTab('result')};
+ACTS.restart=function(){
+  S={E:[50,50,50],touched:[false,false,false],name:'',device:detectDevice(),F:0,B:0,RT:0,ST:0,err:0,M:0,D:0,Dwrong:0};
+  phase='intro';goPhase('intro');
+};
+
+/* ---------- Natija ---------- */
+function gapTxt(g){return (g>0?'+':'')+Math.round(g)}
+function renderResult(){
+  var box=$('#resbox');
+  if(!own){
+    box.innerHTML='<div class="card"><h2>Natija hali yo\'q</h2><p>Avval 4 ta vazifani bajaring.</p><div class="row"><button class="btn primary" id="r-go">Testga o\'tish</button></div></div>';
+    $('#r-go').addEventListener('click',function(){showTab('test')});
+    return;
+  }
+  var v=own.v;
+  var h='<div class="card"><div class="disc">'+esc(DISC)+'</div>'+
+    '<h2 style="margin-top:14px">Sizning natijangiz'+(own.name?', '+esc(own.name):'')+'</h2>'+
+    '<div class="kpis">'+
+    kpi(v.F,'Xotira, oldinga (eng uzun qator)')+kpi(v.B,'Xotira, orqaga (eng uzun qator)')+
+    kpi(v.RT+' ms','Median reaksiya (Stroop)')+kpi((v.ST>0?'+':'')+v.ST+' ms','Stroop farqi (mos emas − mos)')+
+    kpi(v.M+' / 8','Matritsa-mantiq: to\'g\'ri javoblar')+kpi(v.D,'Simvol–raqam: to\'g\'ri juftliklar')+
+    '</div>'+
+    '<p class="note" style="margin-top:10px">Qurilma: '+(own.device==='touch'?'sensorli ekran':'sichqoncha/trekpad')+' · Stroop xatolari: '+own.err+' · Simvol–raqam xatolari: '+own.Dwrong+'</p>'+
+    (own.clipped&&own.clipped.length?'<div class="warn">Kodga ba\'zi qiymatlar chegaraga keltirib yozilgan: '+own.clipped.join(', ')+'.</div>':'')+
+    '<div class="warn"><b>Bu IQ emas.</b> Bu to\'rtta qisqa vazifa, ular qobiliyatning juda tor bir qismini ko\'rsatadi. Mashq, charchoq, uyqu, e\'tibor va qurilma (sensorli ekran yoki sichqoncha) natijaga sezilarli ta\'sir qiladi.</div>'+
+    '<h3>Kodingiz (kursdoshingizga yuboring)</h3><div class="code" id="mycode">'+esc(own.code)+'</div>'+
+    '<div class="row"><button class="btn primary" id="r-copy">Kodni nusxalash</button><button class="btn" id="r-add">Guruh xaritasiga qo\'shish</button></div>';
+
+  var recs=groupRecs(),mine=parseCode(own.code).rec;
+  if(!recs.some(function(r){return r.code===mine.code}))recs.push(mine);
+  var n=recs.length;
+  h+='<h3>Kalibratsiya: o\'z bahongiz ↔ guruhdagi haqiqiy o\'rningiz</h3>';
+  if(n>=MIN_N){
+    var st=computeStats(recs),me=st.filter(function(s){return s.r.code===mine.code})[0];
+    h+='<div class="tw"><table><thead><tr><th>Soha</th><th>O\'z bahom</th><th>Guruhda</th><th>Farq</th></tr></thead><tbody>';
+    SL.forEach(function(s,i){
+      var g=me.gap[i];
+      h+='<tr><td>'+s[0]+'</td><td>'+[v.E1,v.E2,v.E3][i]+'</td><td>'+Math.round(me.p[i])+'</td><td class="'+(g>10?'over':g<-10?'under':'')+'">'+gapTxt(g)+'</td></tr>';
+    });
+    h+='</tbody></table></div><p class="note" style="margin-top:8px">«Guruhda» — guruhdagi haqiqiy o\'rningiz (percentil). Farq = o\'z bahosi − haqiqiy percentil. Musbat — ortiqcha baholash, manfiy — kam baholash. Tezlik = Stroop reaksiyasi va simvol–raqam o\'rtachasi; Xotira = oldinga + orqaga.</p>'+
+      '<div class="warn">Guruh n='+n+(n<OK_N?' (<'+OK_N+'): percentil qiymatlari kichik tanlanmada beqaror, taxminiy deb qabul qiling.':'. Tanlanma kichik va o\'zi tanlagan — umumlashma chiqarmang.')+'</div>';
+  }else{
+    h+='<div class="tw"><table><thead><tr><th>Soha</th><th>O\'z bahongiz (percentil)</th></tr></thead><tbody>'+
+      SL.map(function(s,i){return '<tr><td>'+s[0]+'</td><td>'+[v.E1,v.E2,v.E3][i]+'</td></tr>'}).join('')+'</tbody></table></div>'+
+      '<p class="note" style="margin-top:8px"><b>Guruh natijasi yig\'ilgach ko\'rasiz.</b> Kamida '+MIN_N+' kishi kodini «Guruh xaritasi» bo\'limiga qo\'shing (hozir: '+n+').</p>';
+  }
+  h+='<h3>Bu bizga nimani o\'rgatdi</h3><ol>'+
+    '<li>Qobiliyat tug\'ma «tayyor narsa» emas: layoqat faoliyatda qobiliyatga aylanadi va qobiliyat faqat faoliyatda o\'lchanadi (Ivanov; UMK 11-mavzu), shuning uchun mashq va charchoq balni o\'zgartiradi.</li>'+
+    '<li>Bitta vazifa qobiliyatni to\'liq ko\'rsatmaydi: Spearman umumiy omil <i>g</i> haqida, Thurstone bir nechta birlamchi qobiliyat haqida, Sternberg esa tahliliy, ijodiy va amaliy tomonlar haqida yozadi (Cummings &amp; Sanders, 469–470).</li>'+
+    '<li>O\'zini baholash ob\'ektiv natijadan farq qilishi mumkin — kalibratsiya jadvalidagi farq shuni ko\'rsatadi, lekin kichik va o\'zi tanlagan guruhda bu farq beqaror.</li></ol>'+
+    '<div class="row"><button class="btn" id="r-redo">Qaytadan o\'tish</button></div></div>';
+  box.innerHTML=h;
+  $('#r-copy').addEventListener('click',function(){copyWithToast(own.code)});
+  $('#r-add').addEventListener('click',function(){addCodes([own.code]);toast('Guruh xaritasiga qo\'shildi');renderResult()});
+  $('#r-redo').addEventListener('click',function(){ACTS.restart();showTab('test')});
+}
+function kpi(v,l){return '<div class="kpi"><b>'+v+'</b><span>'+l+'</span></div>'}
+
+/* ---------- Guruh xaritasi ---------- */
+function addCodes(tokens){
+  var list=LS.get('ql1_group',[]);if(!Array.isArray(list))list=[];
+  var have={};list.forEach(function(c){var p=parseCode(c);if(p.ok)have[p.rec.code]=1});
+  var added=0,dup=0,bad=[];
+  tokens.forEach(function(t){
+    var p=parseCode(t);
+    if(!p.ok){bad.push({t:t,why:p.why});return}
+    if(have[p.rec.code]){dup++;return}
+    have[p.rec.code]=1;list.push(p.rec.code);added++;
+  });
+  LS.set('ql1_group',list);
+  return {added:added,dup:dup,bad:bad};
+}
+var clearArm=false;
+function renderGroup(){
+  var recs=groupRecs(),n=recs.length,res=$('#gres');
+  $('#g-own').hidden=!own;
+  if(!n){res.innerHTML='<h2>Jadval</h2><p class="note">Hozircha kod yo\'q. Yuqoridagi maydonga kodlarni qo\'ying.</p>';return}
+  var st=computeStats(recs),show=n>=MIN_N;
+  var h='<h2>Jadval (n='+n+')</h2>';
+  if(!show)h+='<div class="warn">Percentil va farq ustunlari kamida '+MIN_N+' kishi bo\'lganda hisoblanadi.</div>';
+  else if(n<OK_N)h+='<div class="warn">Guruh n='+n+' (<'+OK_N+'): percentil qiymatlari kichik tanlanmada beqaror — taxminiy.</div>';
+  else h+='<div class="warn">Tanlanma kichik va o\'zi tanlagan: umumlashma chiqarmang.</div>';
+  if(show){
+    var mean=[0,1,2].map(function(i){return st.reduce(function(a,s){return a+s.gap[i]},0)/n});
+    var over=[0,1,2].map(function(i){return st.filter(function(s){return s.gap[i]>10}).length});
+    var under=[0,1,2].map(function(i){return st.filter(function(s){return s.gap[i]<-10}).length});
+    h+='<div class="kpis">'+SL.map(function(s,i){return kpi(gapTxt(mean[i]),s[0]+': o\'rtacha farq · ortiqcha '+over[i]+', kam '+under[i])}).join('')+'</div>'+
+      '<p class="note" style="margin-top:6px">Farq = o\'z bahosi − haqiqiy percentil. Musbat — ortiqcha baholash; |farq|>10 sanaladi.</p>';
+  }
+  h+='<div class="tw"><table><thead><tr><th>#</th><th>Ism</th><th>F</th><th>B</th><th>RT</th><th>ST</th><th>M</th><th>D</th><th>E1</th><th>E2</th><th>E3</th>'+
+    (show?'<th>Xot%</th><th>Tez%</th><th>Mant%</th><th>Δ xot</th><th>Δ tez</th><th>Δ mant</th>':'')+'</tr></thead><tbody>';
+  st.forEach(function(s,i){
+    var r=s.r;
+    h+='<tr><td>'+(i+1)+'</td><td>'+(r.name?esc(r.name):'<span class="note">anonim</span>')+'</td><td>'+r.F+'</td><td>'+r.B+'</td><td>'+r.RT+'</td><td>'+r.ST+'</td><td>'+r.M+'</td><td>'+r.D+'</td><td>'+r.E1+'</td><td>'+r.E2+'</td><td>'+r.E3+'</td>';
+    if(show){
+      s.p.forEach(function(p){h+='<td>'+Math.round(p)+'</td>'});
+      s.gap.forEach(function(g){h+='<td class="'+(g>10?'over':g<-10?'under':'')+'">'+gapTxt(g)+'</td>'});
+    }
+    h+='</tr>';
+  });
+  h+='</tbody></table></div>';
+  res.innerHTML=h;
+}
+function tsv(){
+  var recs=groupRecs(),show=recs.length>=MIN_N,st=computeStats(recs);
+  var head=['Ism','F','B','RT','ST','M','D','E1','E2','E3','Xotira%','Tezlik%','Mantiq%','Farq_xotira','Farq_tezlik','Farq_mantiq'];
+  var rows=[head.join('\t')];
+  st.forEach(function(s){
+    var r=s.r;
+    rows.push([r.name||'anonim',r.F,r.B,r.RT,r.ST,r.M,r.D,r.E1,r.E2,r.E3].concat(show?s.p.map(function(p){return Math.round(p)}).concat(s.gap.map(function(g){return Math.round(g)})):['','','','','','']).join('\t'));
+  });
+  return rows.join('\n');
+}
+$('#g-add').addEventListener('click',function(){
+  var ta=$('#gin'),tokens=ta.value.split(/[\s,;]+/).filter(Boolean);
+  var msg=$('#gmsg');
+  if(!tokens.length){msg.innerHTML='<span class="bad">Maydon bo\'sh.</span>';return}
+  var r=addCodes(tokens);
+  msg.innerHTML='<span class="good">Qo\'shildi: '+r.added+'</span>'+(r.dup?' · takrorlangan (o\'tkazib yuborildi): '+r.dup:'')+(r.bad.length?' · <span class="bad">rad etildi: '+r.bad.length+'</span><ul>'+r.bad.map(function(b){return '<li><code>'+esc(b.t.slice(0,60))+'</code> — '+esc(b.why)+'</li>'}).join('')+'</ul>':'');
+  if(!r.bad.length)ta.value='';
+  renderGroup();
+});
+$('#g-own').addEventListener('click',function(){
+  if(!own)return;var r=addCodes([own.code]);
+  $('#gmsg').innerHTML=r.added?'<span class="good">Kodingiz qo\'shildi.</span>':'Kodingiz allaqachon ro\'yxatda.';
+  renderGroup();
+});
+$('#g-copy').addEventListener('click',function(){
+  if(!groupRecs().length){toast('Jadval bo\'sh');return}
+  copyWithToast(tsv());
+});
+$('#g-clear').addEventListener('click',function(){
+  var b=this;
+  if(!clearArm){clearArm=true;b.textContent='Aniq tozalaymi? Yana bosing';setTimeout(function(){clearArm=false;b.textContent='Tozalash'},3000);return}
+  clearArm=false;b.textContent='Tozalash';LS.del('ql1_group');$('#gmsg').textContent='Guruh ro\'yxati tozalandi.';renderGroup();
+});
+
+showTab('test');
+})();
+</script>
+</body>
+</html>
